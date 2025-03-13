@@ -1,8 +1,8 @@
 //Importazione del file in data (post.js)
-
 const arrayPosts = require(`../data/posts.js`)
 
-
+//Importazione del database sql
+const connection = require('../data/db.js');
 
 //Index
 
