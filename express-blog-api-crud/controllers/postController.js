@@ -214,10 +214,10 @@ function index (req,res){
       //console.log(arrayPosts)
 
       //------------------CON DATABASE-------------------------//
-      const {id} = req.params;
+      const {id} = req.params; //destracturing
       const sql = `DELETE FROM posts WHERE id=?`
 
-      connection.query(sql, [id],(err)=>{
+      connection.query(sql, [id],(err)=>{ //senza il destracturing sarebbe stato: [req.params.id]
         if(err) return res.status(500).json({
           error:`Database query failed`
         })
