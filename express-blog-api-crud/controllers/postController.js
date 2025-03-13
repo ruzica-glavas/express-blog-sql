@@ -43,32 +43,50 @@ function index (req,res){
 
 
   //Show
-  
+  //------------------SENZA DATABASE-------------------------//
   function show(req,res){
     //res.send(`Dettagli dei post` + req.params.id) --> Cancello perché se no, non mi legge il codice
 
     //Recupero dell'id nel file di data (posts.js) e si trasforma in numero con il parseInt
     
-    const id = parseInt (req.params.id)
+    //const id = parseInt (req.params.id)
 
     //Ricerca del post tramite il proprio id con il find
 
-    const post = arrayPosts.find (post=>post.id ===id)
+    //const post = arrayPosts.find (post=>post.id ===id)
 
     // Controllo in caso l'oggetto non fosse presente
 
-    if(!post){
-        res.status(404);
-        return res.json({
-            status: 404,
-            error: "Not found",
-            message: "Il post cercato non esiste"
+    //if(!post){
+        //res.status(404);
+        //return res.json({
+            //status: 404,
+            //error: "Not found",
+           // message: "Il post cercato non esiste"
 
-        })
-    }
+       // })
+   // }
 
     //Restituzione in json perché sono oggetti
-    res.json(post)
+   // res.json(post)
+
+    //------------------CON DATABASE-------------------------//
+    const {id} = req.params //destracturing
+    const sql = `SELECT * FROM posts WHERE id=?`
+
+    connection.query(sql, [id],(err,results)=>{ //senza il destracturing sarebbe stato: [req.params.id]
+      if(err) return res.status(500).json({
+        error:`Database query failed`
+      })
+
+      if(results.length===0) return res.status(404).json({
+        status: 404,
+        error: "Not Found",
+        message: "Il Post cercato non é stato trovato"
+      })
+      res.json(results[0])
+    })
+
     
   };
 
