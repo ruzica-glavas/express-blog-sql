@@ -7,8 +7,8 @@ const connection = require('../data/db.js');
 //Index
 
 function index (req,res){
-  //------------------SENZA DATABASE-------------------------/
-  
+  //------------------SENZA DATABASE-------------------------//
+
     //res.send(`Lista dei post`) --> Cancello perché se no, non mi legge il codice
 
     //Logica CRUD per l'index per la restituzione della lista dei post in formato JSON
@@ -26,7 +26,7 @@ function index (req,res){
 
     //res.json(filteredPost);
 
-    //------------------CON DATABASE-------------------------/
+    //------------------CON DATABASE-------------------------//
 
     //preparazione della query
     const sql = `SELECT * FROM posts`
@@ -34,7 +34,8 @@ function index (req,res){
     //esecuzione della query
     connection.query(sql, (err, results)=>{
       if(err) return res.status(500).json({
-        error:`Database query failed`});
+        error:`Database query failed`
+      });
         res.json (results);
     })
   };
@@ -179,38 +180,49 @@ function index (req,res){
 
   
   //Delete (Destroy)
-  
+   //------------------SENZA DATABASE-------------------------//
   function destroy (req,res){
     //res.send(`Eliminazione dei post` + req.params.id) --> Cancello perché se no, non mi legge il codice
 
     //Recupero dell'id e conversione in numero
-    const id = parseInt (req.params.id)
+    //const id = parseInt (req.params.id)
 
     //Ricerca del post tramite l'id (con find)
 
-    const post = arrayPosts.find (post=>post.id ===id)
+    //const post = arrayPosts.find (post=>post.id ===id)
 
     //Controllo per verificare se l'id del post si trova negli array
 
-    if(!post){
-        res.status(404);
-        return res.json({
-            status: 404,
-            error: "Not found",
-            message: "Il post cercato non esiste"
+    //if(!post){
+       //res.status(404);
+        //return res.json({
+           // status: 404,
+           // error: "Not found",
+           // message: "Il post cercato non esiste"
 
-        })
-    }
+        //})
+   // }
     //Rimozione del post
 
-    arrayPosts.splice (arrayPosts.indexOf(post), 1)
+    //arrayPosts.splice (arrayPosts.indexOf(post), 1)
 
     //Restituzione dello status corretto
 
-      res.sendStatus(204)
+      //res.sendStatus(204)
 
       //console.log per vedere da terminale il risultato  
-      console.log(arrayPosts)
+      //console.log(arrayPosts)
+
+      //------------------CON DATABASE-------------------------//
+      const {id} = req.params;
+      const sql = `DELETE FROM posts WHERE id=?`
+
+      connection.query(sql, [id],(err)=>{
+        if(err) return res.status(500).json({
+          error:`Database query failed`
+        })
+        res.sendStatus(204)
+      })
   };
   
 
