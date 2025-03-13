@@ -7,22 +7,36 @@ const connection = require('../data/db.js');
 //Index
 
 function index (req,res){
+  //------------------SENZA DATABASE-------------------------/
+  
     //res.send(`Lista dei post`) --> Cancello perché se no, non mi legge il codice
 
     //Logica CRUD per l'index per la restituzione della lista dei post in formato JSON
-    let filteredPost = arrayPosts
+    //let filteredPost = arrayPosts
 
     //In caso che nella richiesta ci fosse un filtro, si filtrano i post con un if. Il filtro in questo caso é il tag
 
-    if (req.query.tags){
-        filteredPost = arrayPosts.filter(
-            post => post.tags.includes (req.query.tags)
-        )
-    }
+    //if (req.query.tags){
+    //    filteredPost = arrayPosts.filter(
+     //       post => post.tags.includes (req.query.tags)
+     //   )
+   // }
 
     //restituzione in json perché sono oggetti
 
-    res.json(filteredPost);
+    //res.json(filteredPost);
+
+    //------------------CON DATABASE-------------------------/
+
+    //preparazione della query
+    const sql = `SELECT * FROM posts`
+
+    //esecuzione della query
+    connection.query(sql, (err, results)=>{
+      if(err) return res.status(500).json({
+        error:`Database query failed`});
+        res.json (results);
+    })
   };
   
 
